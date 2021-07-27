@@ -85,6 +85,9 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     val skin3DModelFilename = map["skin3DModelFilename"] as? String
                     loadMesh(textureBytes, skin3DModelFilename)
                 }
+                "getLandmarks" -> {
+                    getLandmarks(AugmentFace::class.java)
+                }
                 "dispose" -> {
                     debugLog( " updateMaterials")
                     dispose()
@@ -119,6 +122,11 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 .setSource(BitmapFactory.decodeByteArray(textureBytes, 0, textureBytes!!.size))
                 .build()
                 .thenAccept { texture -> faceMeshTexture = texture }
+    }
+
+    fun getLandmarks(augmentedFace: AugmentedFace) {
+        var buffer = augmentedFace?.meshVertices
+        return buffer
     }
 
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
