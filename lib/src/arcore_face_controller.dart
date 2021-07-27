@@ -55,6 +55,12 @@ class ArCoreFaceController {
     });
   }
 
+  Future<void> getLandmarks(
+      {@required Uint8List textureBytes, String skin3DModelFilename}) {
+    assert(textureBytes != null);
+    return _channel.invokeMethod('getLandmarks', {'parameter': 1});
+  }
+
   void dispose() {
     _channel?.invokeMethod<void>('dispose');
   }

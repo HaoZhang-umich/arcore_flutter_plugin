@@ -124,8 +124,12 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 .thenAccept { texture -> faceMeshTexture = texture }
     }
 
-    fun getLandmarks(augmentedFace: AugmentedFace) {
-        var buffer = augmentedFace?.meshVertices
+    fun getLandmarks(parameter: Int) {
+        println(parameter)
+        val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
+        // var buffer = augmentedFace?.meshVertices
+        val face = faceList[0]
+        var buffer = face.meshVertices
         return buffer
     }
 
