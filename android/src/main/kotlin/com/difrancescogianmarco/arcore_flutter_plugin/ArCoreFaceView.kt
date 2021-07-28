@@ -139,6 +139,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 return buffer.get(0)
                 }
             }
+        return 0.0f
     }
 
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
