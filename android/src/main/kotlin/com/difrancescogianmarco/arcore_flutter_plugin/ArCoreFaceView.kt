@@ -72,36 +72,42 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) : Vector3 {
         if(isSupportedDevice){
             debugLog(call.method +"called on supported device")
             when (call.method) {
                 "init" -> {
                     arScenViewInit(call, result)
+                    return Vector3(0.0f, 0.0f, 0.0f)
                 }
                 "loadMesh" -> {
                     val map = call.arguments as HashMap<*, *>
                     val textureBytes = map["textureBytes"] as ByteArray
                     val skin3DModelFilename = map["skin3DModelFilename"] as? String
                     loadMesh(textureBytes, skin3DModelFilename)
+                    return Vector3(0.0f, 0.0f, 0.0f)
                 }
                 "getLandmarks" -> {
                     val map = call.arguments as HashMap<*,*>
                     val parameter = map["parameter"] as Int
                     val landmarks = getLandmarks(parameter)
                     println(landmarks)
+                    return landmarks
                 }
                 "dispose" -> {
                     debugLog( " updateMaterials")
                     dispose()
+                    return Vector3(0.0f, 0.0f, 0.0f)
                 }
                 else -> {
                     result.notImplemented()
+                    return Vector3(0.0f, 0.0f, 0.0f)
                 }
             }
         }else{
             debugLog("Impossible call " + call.method + " method on unsupported device")
             result.error("Unsupported Device","",null)
+            return Vector3(0.0f, 0.0f, 0.0f)
         }
     }
 
