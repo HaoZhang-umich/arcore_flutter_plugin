@@ -95,7 +95,7 @@ open class Base2ArCoreView(val activity: Activity, context: Context, messenger: 
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) : Float{
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
 
     }
 

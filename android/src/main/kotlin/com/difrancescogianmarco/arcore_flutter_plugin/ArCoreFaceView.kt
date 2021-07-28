@@ -72,42 +72,33 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         }
     }
 
-    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) : Float {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         if(isSupportedDevice){
             debugLog(call.method +"called on supported device")
             when (call.method) {
                 "init" -> {
                     arScenViewInit(call, result)
-                    return 0.0f
                 }
                 "loadMesh" -> {
                     val map = call.arguments as HashMap<*, *>
                     val textureBytes = map["textureBytes"] as ByteArray
                     val skin3DModelFilename = map["skin3DModelFilename"] as? String
                     loadMesh(textureBytes, skin3DModelFilename)
-                    return 0.0f
                 }
                 "getLandmarks" -> {
-                    val map = call.arguments as HashMap<*,*>
-                    val parameter = map["parameter"] as Int
-                    val landmarks = getLandmarks(parameter)
-                    println(landmarks)
-                    return landmarks
+                    getLandmarks(call, result)
                 }
                 "dispose" -> {
                     debugLog( " updateMaterials")
                     dispose()
-                    return 0.0f
                 }
                 else -> {
                     result.notImplemented()
-                    return 0.0f
                 }
             }
         }else{
             debugLog("Impossible call " + call.method + " method on unsupported device")
             result.error("Unsupported Device","",null)
-            return 0.0f
         }
     }
 
@@ -133,16 +124,18 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 .thenAccept { texture -> faceMeshTexture = texture }
     }
 
-    fun getLandmarks(parameter: Int): Float {
+    private fun getLandmarks(call: MethodCall, result: MethodChannel.Result) {
+        val map = call.arguments as HashMap<*,*>
+        val parameter = map["parameter"] as Int
         println(parameter)
         val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
         faceList?.let {
             for (face in faceList){
                 var buffer = face.getMeshVertices()
-                return buffer.get(parameter*3)
+                result.success(buffer.get(parameter * 3))
                 }
             }
-        return 0.0f
+        result.success(0.0f)
     }
 
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
