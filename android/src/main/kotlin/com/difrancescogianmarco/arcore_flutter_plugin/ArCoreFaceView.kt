@@ -132,9 +132,13 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         println(parameter)
         val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
         // var buffer = augmentedFace?.meshVertices
-        val face = faceList[0]
-        var buffer = face.meshVertices
-        return buffer
+        // val face = faceList[0]
+        faceList?.let {
+            for (face in faceList){
+                var buffer = face.getMeshNormals()
+                return buffer
+                }
+            }
     }
 
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
