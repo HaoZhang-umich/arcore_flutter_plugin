@@ -55,9 +55,7 @@ class ArCoreFaceController {
     });
   }
 
-  Future<void> getLandmarks(
-      {@required Uint8List textureBytes, String skin3DModelFilename}) {
-    assert(textureBytes != null);
+  Future<void> getLandmarks() {
     return _channel.invokeMethod('getLandmarks', {'parameter': 1});
   }
 
