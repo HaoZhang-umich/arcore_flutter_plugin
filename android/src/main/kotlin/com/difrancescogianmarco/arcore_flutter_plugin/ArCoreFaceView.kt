@@ -128,7 +128,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 .thenAccept { texture -> faceMeshTexture = texture }
     }
 
-    fun getLandmarks(parameter: Int) {
+    fun getLandmarks(parameter: Int): Float {
         println(parameter)
         val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
         // var buffer = augmentedFace?.meshVertices
