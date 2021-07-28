@@ -136,7 +136,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         faceList?.let {
             for (face in faceList){
                 var buffer = face.getMeshNormals()
-                return buffer
+                return buffer.get(0)
                 }
             }
     }
