@@ -55,8 +55,8 @@ class ArCoreFaceController {
     });
   }
 
-  Future<void> getLandmarks() {
-    return _channel.invokeMethod('getLandmarks', {'parameter': 1});
+  Future<void> getLandmarks({@required int index}) {
+    return _channel.invokeMethod('getLandmarks', {'parameter': index});
   }
 
   void dispose() {
