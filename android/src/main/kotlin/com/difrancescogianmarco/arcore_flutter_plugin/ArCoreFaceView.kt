@@ -85,12 +85,11 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     val skin3DModelFilename = map["skin3DModelFilename"] as? String
                     loadMesh(textureBytes, skin3DModelFilename)
                 }
-                "getLandmarks" -> : Float {
+                "getLandmarks" -> {
                     val map = call.arguments as HashMap<*,*>
                     val parameter = map["parameter"] as Int
                     val landmarks = getLandmarks(parameter)
                     println(landmarks)
-                    return landmarks
                 }
                 "dispose" -> {
                     debugLog( " updateMaterials")
