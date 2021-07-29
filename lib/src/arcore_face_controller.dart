@@ -60,6 +60,7 @@ class ArCoreFaceController {
     try {
       var landmark =
           await _channel.invokeMethod('getLandmarks', {'parameter': index});
+      print(landmark);
       return landmark;
     } on PlatformException catch (ex) {
       print(ex.message);
