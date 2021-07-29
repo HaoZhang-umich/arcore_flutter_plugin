@@ -136,7 +136,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 return landmark
                 }
             }
-        return 0.0f
+        return listOf(0.0f, 0.0f, 0.0f)
     }
 
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
