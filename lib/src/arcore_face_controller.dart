@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -55,8 +56,14 @@ class ArCoreFaceController {
     });
   }
 
-  Future<void> getLandmarks({@required int index}) {
-    return _channel.invokeMethod('getLandmarks', {'parameter': index});
+  Future getLandmarks({@required int index}) async {
+    try {
+      var landmark =
+          await _channel.invokeMethod('getLandmarks', {'parameter': index});
+      return landmark;
+    } on PlatformException catch (ex) {
+      print(ex.message);
+    }
   }
 
   void dispose() {
