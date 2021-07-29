@@ -56,7 +56,7 @@ class ArCoreFaceController {
     });
   }
 
-  getLandmarks({@required int index}) async {
+  Future getLandmarks({@required int index}) async {
     try {
       var landmark =
           await _channel.invokeMethod('getLandmarks', {'parameter': index});
