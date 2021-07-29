@@ -86,7 +86,8 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     loadMesh(textureBytes, skin3DModelFilename)
                 }
                 "getLandmarks" -> {
-                    getLandmarks(call, result)
+                    var landmark = getLandmarks(call, result)
+                    result.success(landmark)
                 }
                 "dispose" -> {
                     debugLog( " updateMaterials")
@@ -124,7 +125,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 .thenAccept { texture -> faceMeshTexture = texture }
     }
 
-    private fun getLandmarks(call: MethodCall, result: MethodChannel.Result) {
+    private fun getLandmarks(call: MethodCall, result: MethodChannel.Result) : Float {
         val map = call.arguments as HashMap<*,*>
         val parameter = map["parameter"] as Int
         println(parameter)
@@ -132,10 +133,12 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         faceList?.let {
             for (face in faceList){
                 var buffer = face.getMeshVertices()
-                result.success(buffer.get(parameter * 3))
+                var landmark = buffer.get(parameter * 3)
+                println(landmark)
+                return landmark
                 }
             }
-        result.success(0.0f)
+        return 0.0f
     }
 
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
