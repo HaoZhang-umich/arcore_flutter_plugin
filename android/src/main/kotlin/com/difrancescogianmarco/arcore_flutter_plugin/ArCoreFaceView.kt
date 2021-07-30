@@ -189,10 +189,10 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 val scene = arSceneView?.getScene()
                 println(scene)
                 // screenPointList = listOf(0.0f, 0.0f, 0.0f)
-                screenPointList = null
+                var screenPointList = null
                 val camera = scene?.getCamera()
                 camera?.let{
-                    screenPoint = it.worldToScreenPoint(pos)
+                    val screenPoint = it.worldToScreenPoint(pos)
                     screenPointList = listOf(screenPoint.x, screenPoint.y, screenPoint.z)
                 }
                 return screenPointList
