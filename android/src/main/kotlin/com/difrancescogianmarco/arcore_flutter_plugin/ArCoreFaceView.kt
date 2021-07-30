@@ -174,7 +174,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         result.success(null)
     }
 
-    private fun getWorldPosition() : Vector3? {
+    private fun getWorldPosition() : List<Float>? {
         val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
         faceList?.let {
             for (face in faceList){
@@ -185,7 +185,8 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
                 node.setParent(faceNodeMap.get(face))
                 val pos = node.getWorldPosition()
-                return pos
+                screenPoint = camera.worldToScreenPoint(pos)
+                return listOf(screenPoint.x, screenPoint.y, screenPoint.z)
             }
         }
         return null
