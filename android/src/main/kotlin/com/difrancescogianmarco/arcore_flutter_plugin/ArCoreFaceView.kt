@@ -185,7 +185,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
                 node.setParent(faceNodeMap.get(face))
                 val pos = node.getWorldPosition()
-                screenPoint = camera.worldToScreenPoint(pos)
+                screenPoint = Camera.worldToScreenPoint(pos)
                 return listOf(screenPoint.x, screenPoint.y, screenPoint.z)
             }
         }
