@@ -34,7 +34,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
     private var faceMeshTexture: Texture? = null
     private val faceNodeMap = HashMap<AugmentedFace, AugmentedFaceNode>()
     private var faceSceneUpdateListener: Scene.OnUpdateListener
-    private val camera: Camera? = SceneView.getScene().getCamera()
+    private val camera: Camera = arSceneView.getScene().getCamera()
     
 
     init {
