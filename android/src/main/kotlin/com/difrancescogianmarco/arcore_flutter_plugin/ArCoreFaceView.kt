@@ -20,7 +20,7 @@ import com.google.ar.sceneform.rendering.Renderable
 import com.google.ar.sceneform.rendering.Texture
 import com.google.ar.sceneform.ux.AugmentedFaceNode
 import com.google.ar.sceneform.Camera
-import com.google.ar.sceneform.sceneform.math.Vector3
+import com.google.ar.sceneform.math.Vector3
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
