@@ -186,12 +186,13 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
                 node.setParent(faceNodeMap.get(face))
                 val pos = node.getWorldPosition()
-                val camera = Scene?.getCamera()
+                val scene = arSceneView?.getScene()
+                println(scene)
+                val camera = scene?.getCamera()
                 camera?.let{
                     val screenPoint = it.worldToScreenPoint(pos)
-                    return listOf(screenPoint.x, screenPoint.y, screenPoint.z)
                 }
-                return null
+                return listOf(screenPoint.x, screenPoint.y, screenPoint.z)
             }
         }
         return null
