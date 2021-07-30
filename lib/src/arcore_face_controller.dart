@@ -56,7 +56,7 @@ class ArCoreFaceController {
     });
   }
 
-  getLandmarks({@required int index}) async {
+  getMeshVertice({@required int index}) async {
     try {
       var landmark =
           await _channel.invokeMethod('getLandmarks', {'parameter': index});
@@ -67,12 +67,11 @@ class ArCoreFaceController {
     }
   }
 
-  getWorldPosition({@required int index}) async {
+  getScreenPosition({@required int index}) async {
     try {
-      var worldPos =
-          await _channel.invokeMethod('getWorldPosition', {'parameter': index});
-      print(worldPos);
-      return worldPos;
+      var screenPos = await _channel
+          .invokeMethod('getScreenPosition', {'parameter': index});
+      return screenPos;
     } on PlatformException catch (ex) {
       print(ex.message);
     }

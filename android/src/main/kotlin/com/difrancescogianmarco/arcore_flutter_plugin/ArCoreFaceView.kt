@@ -102,8 +102,10 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     var centerPose = getCenterPose()
                     result.success(centerPose)
                 }
-                "getWorldPosition" -> {
-                    val position = getWorldPosition()
+                "getScreenPosition" -> {
+                    val map = call.arguments as HashMap<*,*>
+                    val parameter = map["parameter"] as Int
+                    val position = getScreenPosition(parameter)
                     result.success(position)
                 }
                 "dispose" -> {
@@ -165,6 +167,30 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         return null
     }
 
+    private fun getScreenPosition(parameter: Int) : List<Float>? {
+        val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
+        faceList?.let {
+            for (face in faceList){
+                val buffer = face.getMeshVertices();
+                //val vectorLeftEyeLeft = Vector3(buffer.get(33 * 3), buffer.get((33 * 3) + 1), buffer.get((33 * 3) + 2));
+                //val vectorLeftEyeRight = Vector3(buffer.get(133 * 3),buffer.get((133 * 3) + 1), buffer.get((133 * 3) + 2));
+                val targetVector = Vector3(buffer.get(parameter*3), buffer.get(parameter*3+1), buffer.get(parameter*3+2))
+                val node = Node()
+                //node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
+                node.setLocalPosition(targetVector)
+                node.setParent(faceNodeMap.get(face))
+                val pos = node.getWorldPosition()
+                var screenPointList = listOf(0.0f, 0.0f, 0.0f)
+                camera?.let{
+                    val screenPoint = it.worldToScreenPoint(pos)
+                    screenPointList = listOf(screenPoint.x, screenPoint.y, screenPoint.z)
+                }
+                return screenPointList
+            }
+        }
+        return null
+    }
+
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
         val enableAugmentedFaces: Boolean? = call.argument("enableAugmentedFaces")
         if (enableAugmentedFaces != null && enableAugmentedFaces) {
@@ -175,33 +201,6 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         }
 
         result.success(null)
-    }
-
-    private fun getWorldPosition() : List<Float>? {
-        val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
-        faceList?.let {
-            for (face in faceList){
-                val buffer = face.getMeshVertices();
-                val vectorLeftEyeLeft = Vector3(buffer.get(33 * 3), buffer.get((33 * 3) + 1), buffer.get((33 * 3) + 2));
-                val vectorLeftEyeRight = Vector3(buffer.get(133 * 3),buffer.get((133 * 3) + 1), buffer.get((133 * 3) + 2));
-                val node = Node()
-                node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
-                node.setParent(faceNodeMap.get(face))
-                val pos = node.getWorldPosition()
-                //val scene = arSceneView?.getScene()
-                // val scene = Scene()
-                //println(scene)
-                // screenPointList = listOf(0.0f, 0.0f, 0.0f)
-                var screenPointList = listOf(0.0f, 0.0f, 0.0f)
-                //val camera = Scene.getCamera()
-                camera?.let{
-                    val screenPoint = it.worldToScreenPoint(pos)
-                    screenPointList = listOf(screenPoint.x, screenPoint.y, screenPoint.z)
-                }
-                return screenPointList
-            }
-        }
-        return null
     }
 
     override fun onResume() {
