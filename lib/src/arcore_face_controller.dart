@@ -67,6 +67,17 @@ class ArCoreFaceController {
     }
   }
 
+  getWorldPosition({@required int index}) async {
+    try {
+      var worldPos =
+          await _channel.invokeMethod('getWorldPosition', {'parameter': index});
+      print(worldPos);
+      return worldPos;
+    } on PlatformException catch (ex) {
+      print(ex.message);
+    }
+  }
+
   void dispose() {
     _channel?.invokeMethod<void>('dispose');
   }

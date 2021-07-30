@@ -17,6 +17,7 @@ import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.Renderable
 import com.google.ar.sceneform.rendering.Texture
 import com.google.ar.sceneform.ux.AugmentedFaceNode
+import com.google.ar.sceneform.camera
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -91,6 +92,14 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     var landmark = getLandmarks(parameter)
                     result.success(landmark)
                 }
+                "getCenterPose" -> {
+                    var centerPose = getCenterPose()
+                    result.success(centeraPose)
+                }
+                "getWorldPosition" -> {
+                    val position = getWorldPosition()
+                    result.success(position)
+                }
                 "dispose" -> {
                     debugLog( " updateMaterials")
                     dispose()
@@ -139,6 +148,17 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         return listOf(0.0f, 0.0f, 0.0f)
     }
 
+    private fun getCenterPose() : Pose? {
+        val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
+        faceList?.let {
+            for (face in faceList){
+                var facePose = face.getCenterPose()
+                return facePose
+                }
+            }
+        return null
+    }
+
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
         val enableAugmentedFaces: Boolean? = call.argument("enableAugmentedFaces")
         if (enableAugmentedFaces != null && enableAugmentedFaces) {
@@ -149,6 +169,23 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         }
 
         result.success(null)
+    }
+
+    private fun getWorldPosition() : Vector3? {
+        val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
+        faceList?.let {
+            for (face in faceList){
+                val buffer = face.getMeshVertices();
+                val vectorLeftEyeLeft = Vector3(buffer.get(33 * 3), buffer.get((33 * 3) + 1), buffer.get((33 * 3) + 2));
+        // Vector3 vectorLeftEyeRight = new Vector3(buffer.get(133 * 3),buffer.get((133 * 3) + 1), buffer.get((133 * 3) + 2));
+                val node = Node()
+                node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
+                node.setParent(faceNodeMap.get(face))
+                val pos = node.getWorldPosition()
+                return pos
+            }
+        }
+        return null
     }
 
     override fun onResume() {
