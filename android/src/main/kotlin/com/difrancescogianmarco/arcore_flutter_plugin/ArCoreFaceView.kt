@@ -11,13 +11,16 @@ import com.google.ar.core.Config
 import com.google.ar.core.TrackingState
 import com.google.ar.core.exceptions.CameraNotAvailableException
 import com.google.ar.core.exceptions.UnavailableException
+import com.google.ar.core.Pose
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.Scene
+import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.Renderable
 import com.google.ar.sceneform.rendering.Texture
 import com.google.ar.sceneform.ux.AugmentedFaceNode
-import com.google.ar.sceneform.camera
+import com.google.ar.sceneform.Camera
+import com.google.ar.sceneform.sceneform.math.Vector3
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -94,7 +97,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 }
                 "getCenterPose" -> {
                     var centerPose = getCenterPose()
-                    result.success(centeraPose)
+                    result.success(centerPose)
                 }
                 "getWorldPosition" -> {
                     val position = getWorldPosition()
@@ -177,7 +180,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
             for (face in faceList){
                 val buffer = face.getMeshVertices();
                 val vectorLeftEyeLeft = Vector3(buffer.get(33 * 3), buffer.get((33 * 3) + 1), buffer.get((33 * 3) + 2));
-        // Vector3 vectorLeftEyeRight = new Vector3(buffer.get(133 * 3),buffer.get((133 * 3) + 1), buffer.get((133 * 3) + 2));
+                val vectorLeftEyeRight = Vector3(buffer.get(133 * 3),buffer.get((133 * 3) + 1), buffer.get((133 * 3) + 2));
                 val node = Node()
                 node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
                 node.setParent(faceNodeMap.get(face))
