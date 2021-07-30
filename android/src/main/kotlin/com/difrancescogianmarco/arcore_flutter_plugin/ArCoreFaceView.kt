@@ -33,6 +33,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
     private var faceMeshTexture: Texture? = null
     private val faceNodeMap = HashMap<AugmentedFace, AugmentedFaceNode>()
     private var faceSceneUpdateListener: Scene.OnUpdateListener
+    private val camera: Camera? = SceneView.getScene().getCamera()
     
 
     init {
@@ -186,11 +187,12 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                 node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
                 node.setParent(faceNodeMap.get(face))
                 val pos = node.getWorldPosition()
-                val scene = arSceneView?.getScene()
-                println(scene)
+                //val scene = arSceneView?.getScene()
+                // val scene = Scene()
+                //println(scene)
                 // screenPointList = listOf(0.0f, 0.0f, 0.0f)
-                var screenPointList = null
-                val camera = scene?.getCamera()
+                var screenPointList = listOf(0.0f, 0.0f, 0.0f)
+                //val camera = Scene.getCamera()
                 camera?.let{
                     val screenPoint = it.worldToScreenPoint(pos)
                     screenPointList = listOf(screenPoint.x, screenPoint.y, screenPoint.z)
