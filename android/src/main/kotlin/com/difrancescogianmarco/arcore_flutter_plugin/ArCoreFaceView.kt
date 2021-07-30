@@ -14,6 +14,7 @@ import com.google.ar.core.exceptions.UnavailableException
 import com.google.ar.core.Pose
 import com.google.ar.sceneform.ArSceneView
 import com.google.ar.sceneform.Scene
+import com.google.ar.sceneform.SceneView
 import com.google.ar.sceneform.Node
 import com.google.ar.sceneform.rendering.ModelRenderable
 import com.google.ar.sceneform.rendering.Renderable
