@@ -13,7 +13,7 @@ class ArCoreFaceView extends StatefulWidget {
   final bool debug;
 
   const ArCoreFaceView(
-      {required Key key,
+      {Key? key,
       required this.onArCoreViewCreated,
       this.enableAugmentedFaces = false,
       this.debug = false})
