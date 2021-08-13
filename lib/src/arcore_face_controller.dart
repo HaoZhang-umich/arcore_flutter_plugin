@@ -72,6 +72,6 @@ class ArCoreFaceController {
   }
 
   void dispose() {
-    _channel?.invokeMethod<void>('dispose');
+    _channel.invokeMethod<void>('dispose');
   }
 }

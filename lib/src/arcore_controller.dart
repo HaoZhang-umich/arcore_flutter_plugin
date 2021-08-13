@@ -176,7 +176,7 @@ class ArCoreController {
   }
 
   Future<void> removeNode({required String nodeName}) {
-    assert(nodeName != null);
+    //assert(nodeName != null);
     return _channel.invokeMethod('removeARCoreNode', {'nodeName': nodeName});
   }
 
@@ -188,8 +188,8 @@ class ArCoreController {
   }
 
   void _addListeners(ArCoreNode node) {
-    node.position.addListener(() => _handlePositionChanged(node));
-    node?.shape?.materials?.addListener(() => _updateMaterials(node));
+    node.position?.addListener(() => _handlePositionChanged(node));
+    node.shape?.materials?.addListener(() => _updateMaterials(node));
 
     if (node is ArCoreRotatingNode) {
       node.degreesPerSecond.addListener(() => _handleRotationChanged(node));
@@ -198,7 +198,7 @@ class ArCoreController {
 
   void _handlePositionChanged(ArCoreNode node) {
     _channel.invokeMethod<void>('positionChanged',
-        _getHandlerParams(node, convertVector3ToMap(node.position.value)!));
+        _getHandlerParams(node, convertVector3ToMap(node.position?.value)!));
   }
 
   void _handleRotationChanged(ArCoreRotatingNode node) {
