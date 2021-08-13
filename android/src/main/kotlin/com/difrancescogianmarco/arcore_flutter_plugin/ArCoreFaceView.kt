@@ -92,10 +92,10 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     val skin3DModelFilename = map["skin3DModelFilename"] as? String
                     loadMesh(textureBytes, skin3DModelFilename)
                 }
-                "getLandmarks" -> {
+                "getMeshVertices" -> {
                     val map = call.arguments as HashMap<*,*>
                     val parameter = map["parameter"] as Int
-                    var landmark = getLandmarks(parameter)
+                    var landmark = getLandmark(parameter)
                     result.success(landmark)
                 }
                 "getCenterPose" -> {
@@ -138,22 +138,23 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
 
         // Load the face mesh texture.
         Texture.builder()
-                //.setSource(activity, Uri.parse("fox_face_mesh_texture.png"))
                 .setSource(BitmapFactory.decodeByteArray(textureBytes, 0, textureBytes!!.size))
                 .build()
                 .thenAccept { texture -> faceMeshTexture = texture }
     }
 
-    private fun getLandmarks(parameter: Int) : List<Float> {
+    private fun getLandmark(parameter: Int) : List<Float>? {
         val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
         faceList?.let {
             for (face in faceList){
                 var buffer = face.getMeshVertices()
-                var landmark = listOf(buffer.get(parameter * 3), buffer.get(parameter * 3+1), buffer.get(parameter * 3+2))
+                var landmark = listOf(buffer.get(parameter * 3), 
+                    buffer.get(parameter * 3+1), 
+                    buffer.get(parameter * 3+2))
                 return landmark
                 }
             }
-        return listOf(0.0f, 0.0f, 0.0f)
+        return null
     }
 
     private fun getCenterPose() : Pose? {
@@ -168,26 +169,29 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
     }
 
     private fun getScreenPosition(parameter: Int) : List<Float>? {
+        // Get the facemesh vertex's screen position in exact pixel value. Top left = [0, 0, 0]
+        // Input: parameter -> the index of facemesh vertex
         val faceList = arSceneView?.session?.getAllTrackables(AugmentedFace::class.java)
         faceList?.let {
             for (face in faceList){
                 val buffer = face.getMeshVertices();
-                //val vectorLeftEyeLeft = Vector3(buffer.get(33 * 3), buffer.get((33 * 3) + 1), buffer.get((33 * 3) + 2));
-                //val vectorLeftEyeRight = Vector3(buffer.get(133 * 3),buffer.get((133 * 3) + 1), buffer.get((133 * 3) + 2));
-                val targetVector = Vector3(buffer.get(parameter*3), buffer.get(parameter*3+1), buffer.get(parameter*3+2))
+                val targetVector = Vector3(buffer.get(parameter*3), 
+                    buffer.get(parameter*3+1), 
+                    buffer.get(parameter*3+2))
                 val node = Node()
-                //node.setLocalPosition(Vector3((vectorLeftEyeLeft.x + vectorLeftEyeRight.x) / 2, (vectorLeftEyeLeft.y + vectorLeftEyeRight.y) / 2, (vectorLeftEyeLeft.z + vectorLeftEyeRight.z) / 2))
                 node.setLocalPosition(targetVector)
                 node.setParent(faceNodeMap.get(face))
-                val pos = node.getWorldPosition()
+                val pos = node.getWorldPosition() // Node to world position
                 var screenPointList = listOf(0.0f, 0.0f, 0.0f)
                 camera?.let{
-                    val screenPoint = it.worldToScreenPoint(pos)
+                    val screenPoint = it.worldToScreenPoint(pos) // World position to screen position
                     screenPointList = listOf(screenPoint.x, screenPoint.y, screenPoint.z)
                 }
+                // Only return the screen position of the first trackable face in faceList
                 return screenPointList
             }
         }
+        // If no face detected then return null
         return null
     }
 

@@ -10,10 +10,10 @@ class ArCoreNode {
   ArCoreNode({
     this.shape,
     this.image,
-    String name,
-    Vector3 position,
-    Vector3 scale,
-    Vector4 rotation,
+    String? name,
+    required Vector3 position,
+    required Vector3 scale,
+    required Vector4 rotation,
     this.children = const [],
   })  : name = name ?? random_string.randomString(),
         position = ValueNotifier(position),
@@ -23,7 +23,7 @@ class ArCoreNode {
 
   final List<ArCoreNode> children;
 
-  final ArCoreShape shape;
+  final ArCoreShape? shape;
 
   final ValueNotifier<Vector3> position;
 
@@ -33,7 +33,7 @@ class ArCoreNode {
 
   final String name;
 
-  final ArCoreImage image;
+  final ArCoreImage? image;
 
   Map<String, dynamic> toMap() => <String, dynamic>{
         'dartType': runtimeType.toString(),

@@ -19,8 +19,8 @@ class ArCoreView extends StatefulWidget {
   final ArCoreViewType type;
 
   const ArCoreView(
-      {Key key,
-      @required this.onArCoreViewCreated,
+      {Key? key,
+      required this.onArCoreViewCreated,
 //    @required this.onArCoreUnsupported,
       this.enableTapRecognizer = false,
       this.enablePlaneRenderer = true,
@@ -36,7 +36,7 @@ class ArCoreView extends StatefulWidget {
 class _ArCoreViewState extends State<ArCoreView> with WidgetsBindingObserver {
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance?.addObserver(this);
     super.initState();
   }
 
@@ -73,7 +73,7 @@ class _ArCoreViewState extends State<ArCoreView> with WidgetsBindingObserver {
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance?.removeObserver(this);
     super.dispose();
   }
 }

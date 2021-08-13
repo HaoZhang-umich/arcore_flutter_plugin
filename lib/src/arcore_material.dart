@@ -28,12 +28,12 @@ class ArCoreMaterial {
   final double reflectance;
 
   ArCoreMaterial({
-    this.metallic,
-    this.roughness,
-    this.reflectance,
-    this.color,
+    required this.metallic,
+    required this.roughness,
+    required this.reflectance,
+    required this.color,
 //    this.texture,
-    this.textureBytes,
+    required this.textureBytes,
   });
 
   Map<String, dynamic> toMap() => <String, dynamic>{

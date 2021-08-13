@@ -2,9 +2,9 @@ import 'dart:typed_data';
 
 class ArCoreImage {
   ArCoreImage({
-    this.bytes,
-    this.width,
-    this.height,
+    required this.bytes,
+    required this.width,
+    required this.height,
   })  : assert(bytes != null),
         assert(width != null && width > 0),
         assert(height != null && height > 0);

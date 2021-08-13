@@ -8,7 +8,9 @@ import '../arcore_flutter_plugin.dart';
 
 class ArCoreFaceController {
   ArCoreFaceController(
-      {int id, this.enableAugmentedFaces, this.debug = false}) {
+      {required int id,
+      required this.enableAugmentedFaces,
+      this.debug = false}) {
     _channel = MethodChannel('arcore_flutter_plugin_$id');
     _channel.setMethodCallHandler(_handleMethodCalls);
     init();
@@ -16,8 +18,8 @@ class ArCoreFaceController {
 
   final bool enableAugmentedFaces;
   final bool debug;
-  MethodChannel _channel;
-  StringResultHandler onError;
+  late MethodChannel _channel;
+  late StringResultHandler onError;
 
   init() async {
     try {
@@ -48,7 +50,7 @@ class ArCoreFaceController {
   }
 
   Future<void> loadMesh(
-      {@required Uint8List textureBytes, String skin3DModelFilename}) {
+      {required Uint8List textureBytes, String? skin3DModelFilename}) {
     assert(textureBytes != null);
     return _channel.invokeMethod('loadMesh', {
       'textureBytes': textureBytes,
@@ -56,25 +58,17 @@ class ArCoreFaceController {
     });
   }
 
-  getMeshVertice({@required int index}) async {
-    try {
-      var landmark =
-          await _channel.invokeMethod('getLandmarks', {'parameter': index});
-      // print(landmark);
-      return landmark;
-    } on PlatformException catch (ex) {
-      print(ex.message);
-    }
+  Future<dynamic> getMeshVertice({required int index}) async {
+    return await _channel.invokeMethod('getLandmarks', {'parameter': index});
   }
 
-  getScreenPosition({@required int index}) async {
-    try {
-      var screenPos = await _channel
-          .invokeMethod('getScreenPosition', {'parameter': index});
-      return screenPos;
-    } on PlatformException catch (ex) {
-      print(ex.message);
-    }
+  Future<dynamic> getCenterPose() async {
+    return await _channel.invokeMethod('getCenterPose');
+  }
+
+  Future<dynamic> getScreenPosition({required int index}) async {
+    return await _channel
+        .invokeMethod('getScreenPosition', {'parameter': index});
   }
 
   void dispose() {
