@@ -228,7 +228,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
             PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
                 if (copyResult === PixelCopy.SUCCESS) {
                     try {
-                        saveBitmapToDisk(bitmap)
+                        saveBitmapToCacheDir(bitmap)
                     } catch (e: IOException) {
                         e.printStackTrace();
                     }
@@ -244,7 +244,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
     }
 
     @Throws(IOException::class)
-    fun saveBitmapToDisk(bitmap: Bitmap):String {
+    fun saveBitmapToCacheDir(bitmap: Bitmap):String {
 
 //        val now = LocalDateTime.now()
 //        now.format(DateTimeFormatter.ofPattern("M/d/y H:m:ss"))
@@ -252,7 +252,8 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         // android/data/com.hswo.mvc_2021.hswo_mvc_2021_flutter_ar/files/
         // activity.applicationContext.getFilesDir().toString() //doesnt work!!
         // Environment.getExternalStorageDirectory()
-        val mPath: String =  Environment.getExternalStorageDirectory().toString() + "/DCIM/" + now + ".jpg"
+        val mPath: String = context.getCacheDir().toString() + now + ".jpg"
+        //Environment.getExternalStorageDirectory().toString() + "/DCIM/Camera/" + now + ".jpg"
         val mediaFile = File(mPath)
         debugLog(mediaFile.toString())
         //Log.i("path","fileoutputstream opened")
