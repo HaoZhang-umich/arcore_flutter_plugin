@@ -108,6 +108,9 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     val position = getScreenPosition(parameter)
                     result.success(position)
                 }
+                "takeScreenshot" -> {
+                    takeScreenshot(call, result);
+                }
                 "dispose" -> {
                     debugLog( " updateMaterials")
                     dispose()
@@ -194,6 +197,62 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         // If no face detected then return null
         return null
     }
+
+
+    private fun takeScreenshot(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            // create bitmap screen capture
+
+            // Create a bitmap the size of the scene view.
+            val bitmap: Bitmap = Bitmap.createBitmap(arSceneView!!.getWidth(), arSceneView!!.getHeight(),
+                    Bitmap.Config.ARGB_8888)
+
+            // Create a handler thread to offload the processing of the image.
+            val handlerThread = HandlerThread("PixelCopier")
+            handlerThread.start()
+            // Make the request to copy.
+            // Make the request to copy.
+            PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
+                if (copyResult === PixelCopy.SUCCESS) {
+                    try {
+                        saveBitmapToDisk(bitmap)
+                    } catch (e: IOException) {
+                        e.printStackTrace();
+                    }
+                }
+                handlerThread.quitSafely()
+            }, Handler(handlerThread.getLooper()))
+
+        } catch (e: Throwable) {
+            // Several error may come out with file handling or DOM
+            e.printStackTrace()
+        }
+        result.success(null)
+    }
+
+    @Throws(IOException::class)
+    fun saveBitmapToDisk(bitmap: Bitmap):String {
+
+//        val now = LocalDateTime.now()
+//        now.format(DateTimeFormatter.ofPattern("M/d/y H:m:ss"))
+        val now = "rawScreenshot"
+        // android/data/com.hswo.mvc_2021.hswo_mvc_2021_flutter_ar/files/
+        // activity.applicationContext.getFilesDir().toString() //doesnt work!!
+        // Environment.getExternalStorageDirectory()
+        val mPath: String =  Environment.getExternalStorageDirectory().toString() + "/DCIM/" + now + ".jpg"
+        val mediaFile = File(mPath)
+        debugLog(mediaFile.toString())
+        //Log.i("path","fileoutputstream opened")
+        //Log.i("path",mPath)
+        val fileOutputStream = FileOutputStream(mediaFile)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+        fileOutputStream.flush()
+        fileOutputStream.close()
+//        Log.i("path","fileoutputstream closed")
+        return mPath as String
+    }
+
+
 
     private fun arScenViewInit(call: MethodCall, result: MethodChannel.Result) {
         val enableAugmentedFaces: Boolean? = call.argument("enableAugmentedFaces")
