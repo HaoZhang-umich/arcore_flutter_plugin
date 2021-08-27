@@ -27,6 +27,18 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlin.collections.HashMap
 
+// The libs required by takeScreenshot
+import android.graphics.Bitmap
+import android.os.Environment
+import android.view.PixelCopy
+import android.os.HandlerThread
+import android.content.ContextWrapper
+import java.io.FileOutputStream
+import java.io.File
+import java.io.IOException
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+
 class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessenger, id: Int, debug: Boolean) : BaseArCoreView(activity, context, messenger, id, debug) {
 
     private val TAG: String = ArCoreFaceView::class.java.name
