@@ -71,6 +71,10 @@ class ArCoreFaceController {
         .invokeMethod('getScreenPosition', {'parameter': index});
   }
 
+  Future<dynamic> takeScreenshot() async {
+    return await _channel.invokeMethod('takeScreenshot');
+  }
+
   void dispose() {
     _channel.invokeMethod<void>('dispose');
   }
