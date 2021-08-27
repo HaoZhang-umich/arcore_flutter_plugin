@@ -122,7 +122,9 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
                     result.success(position)
                 }
                 "takeScreenshot" -> {
-                    takeScreenshot(call, result);
+                    val map = call.arguments as HashMap<*,*>
+                    val imagePath = map["imagePath"] as String
+                    takeScreenshot(imagePath, result);
                 }
                 "dispose" -> {
                     debugLog( " updateMaterials")
@@ -212,7 +214,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
     }
 
 
-    private fun takeScreenshot(call: MethodCall, result: MethodChannel.Result) {
+    private fun takeScreenshot(imagePath: String, result: MethodChannel.Result) {
         try {
             // create bitmap screen capture
 
@@ -228,7 +230,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
             PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
                 if (copyResult === PixelCopy.SUCCESS) {
                     try {
-                        saveBitmapToCacheDir(bitmap)
+                        saveBitmapToCacheDir(bitmap, imagePath)
                     } catch (e: IOException) {
                         e.printStackTrace();
                     }
@@ -244,7 +246,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
     }
 
     @Throws(IOException::class)
-    fun saveBitmapToCacheDir(bitmap: Bitmap):String {
+    fun saveBitmapToCacheDir(bitmap: Bitmap, imagePath: String):String {
 
 //        val now = LocalDateTime.now()
 //        now.format(DateTimeFormatter.ofPattern("M/d/y H:m:ss"))
@@ -252,7 +254,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         // android/data/com.hswo.mvc_2021.hswo_mvc_2021_flutter_ar/files/
         // activity.applicationContext.getFilesDir().toString() //doesnt work!!
         // Environment.getExternalStorageDirectory()
-        val mPath: String = context.getCacheDir().toString() + now + ".jpg"
+        val mPath: String = imagePath;//context.getCacheDir().toString() + now + ".jpg"
         //Environment.getExternalStorageDirectory().toString() + "/DCIM/Camera/" + now + ".jpg"
         val mediaFile = File(mPath)
         debugLog(mediaFile.toString())
