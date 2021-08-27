@@ -28,6 +28,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlin.collections.HashMap
 
 // The libs required by takeScreenshot
+import android.os.Handler
 import android.graphics.Bitmap
 import android.os.Environment
 import android.view.PixelCopy
