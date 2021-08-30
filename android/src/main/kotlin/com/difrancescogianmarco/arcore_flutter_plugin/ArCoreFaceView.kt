@@ -218,12 +218,12 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         try {
             val handlerThread = HandlerThread("PixelCopier")
             handlerThread.start()
-            val looper: Looper = handlerThread.getLooper();
-            val handler: Handler = new Handler(looper); 
+            val looper = handlerThread.getLooper();
+            val handler: Handler = Handler(looper); 
 
             // create bitmap screen capture
             // Create a bitmap the size of the scene view.
-            handler.post(new Runnable() {
+            handler.post(Runnable() {
                 val bitmap: Bitmap = Bitmap.createBitmap(arSceneView!!.getWidth(), arSceneView!!.getHeight(),
                     Bitmap.Config.ARGB_8888)
 
