@@ -246,7 +246,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
     }
 
     @Throws(IOException::class)
-    fun saveBitmapToCacheDir(bitmap: Bitmap, imagePath: String, result: MethodChannel.Result):String {
+    fun saveBitmapToCacheDir(bitmap: Bitmap, imagePath: String, result: MethodChannel.Result) {
 
 //        val now = LocalDateTime.now()
 //        now.format(DateTimeFormatter.ofPattern("M/d/y H:m:ss"))
@@ -269,7 +269,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         //println("=========fileoutputstream opened==========")
         //println(mPath)
         //return mPath as String
-        result.success(mPath.toString)
+        result.success(mPath.toString())
     }
 
 
