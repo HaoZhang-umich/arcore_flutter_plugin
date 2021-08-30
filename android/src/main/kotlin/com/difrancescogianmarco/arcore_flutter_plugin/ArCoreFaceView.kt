@@ -216,26 +216,31 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
 
     private fun takeScreenshot(imagePath: String, result: MethodChannel.Result) {
         try {
-            // create bitmap screen capture
-
-            // Create a bitmap the size of the scene view.
-            val bitmap: Bitmap = Bitmap.createBitmap(arSceneView!!.getWidth(), arSceneView!!.getHeight(),
-                    Bitmap.Config.ARGB_8888)
-
-            // Create a handler thread to offload the processing of the image.
             val handlerThread = HandlerThread("PixelCopier")
             handlerThread.start()
+            Looper looper = handlerThread.getLooper();
+            Handler handler = new Handler(looper); 
+
+            // create bitmap screen capture
+            // Create a bitmap the size of the scene view.
+            handler.post(new Runnable() {
+                val bitmap: Bitmap = Bitmap.createBitmap(arSceneView!!.getWidth(), arSceneView!!.getHeight(),
+                    Bitmap.Config.ARGB_8888)
+
+                // Create a handler thread to offload the processing of the image.
+
             // Make the request to copy.
-            PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
-                if (copyResult === PixelCopy.SUCCESS) {
-                    try {
-                        saveBitmapToCacheDir(bitmap, imagePath)
-                    } catch (e: IOException) {
-                        e.printStackTrace();
+                PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
+                    if (copyResult === PixelCopy.SUCCESS) {
+                        try {
+                            saveBitmapToCacheDir(bitmap, imagePath)
+                        } catch (e: IOException) {
+                            e.printStackTrace();
+                        }
                     }
-                }
-                handlerThread.quitSafely()
-            }, Handler(handlerThread.getLooper()))
+                    handlerThread.quitSafely()
+                    }, handler)
+            })
 
         } catch (e: Throwable) {
             // Several error may come out with file handling or DOM
