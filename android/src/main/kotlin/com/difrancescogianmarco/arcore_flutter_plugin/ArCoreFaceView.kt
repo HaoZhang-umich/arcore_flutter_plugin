@@ -226,7 +226,6 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
             val handlerThread = HandlerThread("PixelCopier")
             handlerThread.start()
             // Make the request to copy.
-            // Make the request to copy.
             PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
                 if (copyResult === PixelCopy.SUCCESS) {
                     try {
@@ -258,13 +257,16 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         //Environment.getExternalStorageDirectory().toString() + "/DCIM/Camera/" + now + ".jpg"
         val mediaFile = File(mPath)
         debugLog(mediaFile.toString())
-        //Log.i("path","fileoutputstream opened")
-        //Log.i("path",mPath)
+
         val fileOutputStream = FileOutputStream(mediaFile)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
         fileOutputStream.flush()
         fileOutputStream.close()
 //        Log.i("path","fileoutputstream closed")
+        Log.i("path","=========fileoutputstream closed==========")
+        Log.i("path",mPath)
+        //println("=========fileoutputstream opened==========")
+        //println(mPath)
         return mPath as String
     }
 
