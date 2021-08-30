@@ -223,7 +223,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
 
             // create bitmap screen capture
             // Create a bitmap the size of the scene view.
-            handler.post(Runnable() {
+            handler.post( {
                 val bitmap: Bitmap = Bitmap.createBitmap(arSceneView!!.getWidth(), arSceneView!!.getHeight(),
                     Bitmap.Config.ARGB_8888)
 
