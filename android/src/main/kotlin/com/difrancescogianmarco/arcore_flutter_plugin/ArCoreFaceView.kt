@@ -229,7 +229,7 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
             PixelCopy.request(arSceneView!!, bitmap, { copyResult ->
                 if (copyResult === PixelCopy.SUCCESS) {
                     try {
-                        saveBitmapToCacheDir(bitmap, imagePath, result)
+                        saveBitmapToCacheDir(bitmap, imagePath)
                     } catch (e: IOException) {
                         e.printStackTrace();
                     }
@@ -242,11 +242,11 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
             e.printStackTrace()
         }
         //Log.i("path","======result.success======")
-        //result.success(null)
+        result.success(null)
     }
 
     @Throws(IOException::class)
-    fun saveBitmapToCacheDir(bitmap: Bitmap, imagePath: String, result: MethodChannel.Result) {
+    fun saveBitmapToCacheDir(bitmap: Bitmap, imagePath: String):String {
 
 //        val now = LocalDateTime.now()
 //        now.format(DateTimeFormatter.ofPattern("M/d/y H:m:ss"))
@@ -268,8 +268,8 @@ class ArCoreFaceView(activity:Activity,context: Context, messenger: BinaryMessen
         Log.i("path",mPath)
         //println("=========fileoutputstream opened==========")
         //println(mPath)
-        //return mPath as String
-        result.success(mPath.toString())
+        return mPath as String
+        //result.success(mPath.toString())
     }
 
 
